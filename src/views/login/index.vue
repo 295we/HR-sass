@@ -146,6 +146,7 @@ export default {
           return false
         }
       })
+      this.$store.dispatch('login', this.loginForm)
     }
   }
 }
