@@ -18,6 +18,9 @@ const actions = {
     // 调用api的接口
     const result = await login(data) // 拿到token
     context.commit('setToken', result) // 设置token
+  },
+  logout({ commit }, value) {
+
   }
 }
 const getters = {}
