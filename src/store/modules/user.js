@@ -6,7 +6,7 @@ const state = {
 const mutations = {
   setToken(state, token) {
     state.token = token
-    setToken(state.token) // 同步给缓存 cookie中
+    setToken(token) // 同步给缓存 cookie中
   },
   removeToken(state) {
     state.token = null // 将vuex中的token置空

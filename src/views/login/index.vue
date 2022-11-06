@@ -168,7 +168,7 @@ $cursor: #fff;
 
 /* reset element-ui css */
 .login-container {
-  background: url("~@/assets/common/login.jpg") center;
+  background: url("~@/assets/common/login.jpg") center no-repeat;
   .el-input {
     display: inline-block;
     height: 47px;
