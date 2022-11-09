@@ -1,4 +1,4 @@
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken, setTimeStamp } from '@/utils/auth'
 import { login, getUserInfo, getUserDetailById } from '@/api/user'
 const state = {
   token: getToken(), // 设置token为共享状态 一初始化vuex就先从缓存中读取token
@@ -27,6 +27,7 @@ const actions = {
     // 调用api的接口
     const result = await login(data) // 拿到token
     context.commit('setToken', result) // 设置token
+    setTimeStamp() // 在cookie中存入当前的时间戳
   },
   // 封装调用用户资料的action
   async getUserInfo({ commit }, dada) {
@@ -38,7 +39,12 @@ const actions = {
     return baseResult // 这里返回我们调接口拿到的数据 为后面做权限埋伏笔
   },
 
-  logout({ commit }, value) {}
+  logout({ commit }, value) {
+    // 删除token 不仅删除了vuex中的token 还删除了cookie中的token
+    commit('removeToken')
+    // 删除用户资料
+    commit('removeUserInfo')
+  }
 }
 const getters = {}
 

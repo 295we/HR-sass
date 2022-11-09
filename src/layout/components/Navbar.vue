@@ -1,10 +1,6 @@
 <template>
   <div class="navbar">
-    <hamburger
-      :is-active="sidebar.opened"
-      class="hamburger-container"
-      @toggleClick="toggleSideBar"
-    />
+    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
     <div class="app-breadcrumb">
       武汉工程科技教育股份有限公司
       <span class="breadBtn">体验版</span>
@@ -57,8 +53,8 @@ export default {
       this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {
-      await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      await this.$store.dispatch('user/logout') // 这里无论写不写await 登出方法都是同步的
+      this.$router.push(`/login`) // 点登出后跳到登录页
     }
   }
 }
