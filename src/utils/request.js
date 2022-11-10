@@ -50,7 +50,14 @@ service.interceptors.response.use(
     }
   },
   error => {
-    Message.error(error.message) // 提示错误
+    // error 信息里面会有一个response的对象
+    if (error.response && error.response.data && error.response.data.code === 10002) {
+      // token过期的被动处理 后端返回的状态码
+      store.dispatch('user/logout')
+      router.push('/login')
+    } else {
+      Message.error(error.message) // 提示错误
+    }
     return Promise.reject(error) // 返回执行错误，让当前的执行链跳出成功 直接进入catch
   }
 )
