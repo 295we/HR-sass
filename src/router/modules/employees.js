@@ -11,7 +11,8 @@ export default {
       path: '', // 这里什么都不写 表示在地址栏跳到/employees下的时候布局里不但有Layout 还有二级路由employees
       component: () => import('@/views/employees'),
       meta: {
-        title: '员工管理' // 这里为什么要用title呢 因为左侧导航读取了title属性
+        title: '员工管理', // 这里为什么要用title呢 因为左侧导航读取了title属性
+        icon: 'people'
       }
     }
   ]

@@ -9,7 +9,8 @@ export default {
       path: '',
       component: () => import('@/views/salaries'),
       meta: {
-        title: '工资'
+        title: '工资',
+        icon: 'money'
       }
     }
   ]

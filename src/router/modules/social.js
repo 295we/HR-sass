@@ -9,7 +9,8 @@ export default {
       path: '',
       component: () => import('@/views/social'),
       meta: {
-        title: '社保'
+        title: '社保',
+        table: 'table'
       }
     }
   ]
