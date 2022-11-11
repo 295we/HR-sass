@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import approvals from '@/views/approvals'
-import attendances from '@/views/attendances'
-import departments from '@/views/departments'
-import employees from '@/views/employees'
-import permission from '@/views/permission'
-import salaries from '@/views/salaries'
-import setting from '@/views/setting'
-import social from '@/views/social'
+import approvalsRouter from './modules/approvals'
+import departmentsRouter from './modules/departments'
+import employeesRouter from './modules/employees'
+import permissionRouter from './modules/permission'
+import attendancesRouter from './modules/attendances'
+import salariesRouter from './modules/salaries'
+import settingRouter from './modules/setting'
+import socialRouter from './modules/social'
 
 Vue.use(Router)
 
@@ -44,7 +44,7 @@ export const constantRoutes = [
   { path: '*', redirect: '/404', hidden: true }
 ]
 
-export const asyncRoutes = [approvals, attendances, departments, employees, permission, salaries, setting, social]
+export const asyncRoutes = [approvalsRouter, departmentsRouter, employeesRouter, permissionRouter, attendancesRouter, salariesRouter, settingRouter, socialRouter]
 
 const createRouter = () =>
   new Router({
