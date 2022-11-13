@@ -44,6 +44,8 @@ export const constantRoutes = [
   { path: '*', redirect: '/404', hidden: true }
 ]
 
+// 定义一个动态路由变量
+// 这里导出这个变量 后面做权限的时候会用到
 export const asyncRoutes = [approvalsRouter, departmentsRouter, employeesRouter, permissionRouter, attendancesRouter, salariesRouter, settingRouter, socialRouter]
 
 const createRouter = () =>

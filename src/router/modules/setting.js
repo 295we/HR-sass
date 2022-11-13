@@ -10,7 +10,7 @@ export default {
       component: () => import('@/views/setting'),
       meta: {
         title: '公司设置',
-        icon: 'phone'
+        icon: 'setting'
       }
     }
   ]

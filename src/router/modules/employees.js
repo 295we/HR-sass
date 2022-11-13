@@ -12,7 +12,7 @@ export default {
       component: () => import('@/views/employees'),
       meta: {
         title: '员工管理', // 这里为什么要用title呢 因为左侧导航读取了title属性
-        icon: 'user'
+        icon: 'peoples'
       }
     }
   ]

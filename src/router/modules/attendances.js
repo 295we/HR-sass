@@ -10,7 +10,7 @@ export default {
       component: () => import('@/views/attendances'),
       meta: {
         title: '考勤',
-        icon: 'education'
+        icon: 'skill'
       }
     }
   ]
