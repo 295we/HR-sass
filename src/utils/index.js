@@ -109,12 +109,12 @@ export function param2Obj(url) {
  * @param {string} rootValue
  */
 // 用于将组织结构里请求到的数据进行递归格式化
-export const treeListToData = (list, rootValue) => {
+export const transListToData = (list, rootValue) => {
   var arr = []
   list.forEach(item => {
     if (item.pid === rootValue) {
       // 说明找到了 找到之后就要去找item下面有没有子节点
-      const children = treeListToData(list, item.id)
+      const children = transListToData(list, item.id)
       if (children.length) {
         // 如果children的长度大于0 则说明找到了子节点
         item.children = children

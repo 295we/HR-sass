@@ -26,7 +26,6 @@ import { delDepartments } from '@/api/department'
 export default {
   name: 'TreeTools',
   props: {
-    // 定义一个props属性
     treeNode: {
       type: Object,
       required: true
@@ -40,21 +39,17 @@ export default {
     operateDepts(type) {
       if (type === 'add') {
         // 执行添加部门的操作
+        this.$emit('addDepts', this.$treeNode) // 触发自定义事件告诉父组件来显示dialog 因为是添加子部门 所以需要传递父部门的信息
       } else if (type === 'edit') {
         // 执行修改部门的操作
       } else {
         // 执行删除部门的操作
-        this.$confirm('确认删除该部门吗？')
-          .then(() => {
-            // 如果点击确定就会进入then
-            return delDepartments(this.treeNode.id) // 返回promise对象
-          })
-          .then(result => {
-            // 如果删除成功了就会进入这里
-            this.$emit('delDepts') // 让父组件触发子组件的自定义事件
-            this.$message('删除成功')
-            console.log(result)
-          })
+        this.$confirm('确认删除该部门吗？').then(async result => {
+          await delDepartments(this.treeNode.id)
+          // 如果await执行了 那么就会执行下面的代码，此时代表删除数据成功了，我们应该重新获取页面的数据
+          this.$emit('delDepts') // 触发自定义事件
+          this.$message.success('删除部门成功')
+        })
       }
     }
   }
