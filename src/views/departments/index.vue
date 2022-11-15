@@ -4,10 +4,10 @@
       <!-- 组织架构内容 -->
       <el-card class="tree-card">
         <!-- 放置结构内容 头部 -->
-        <tree-tools :tree-node="company" :is-root="true" />
+        <tree-tools :tree-node="company" :is-root="true" @delDepts="getDepartments" />
         <!-- 放置el-tree 身体部分-->
         <el-tree :data="departs" :props="defaultProps" :default-expand-all="true">
-          <tree-tools slot-scope="{ data }" :tree-node="data" />
+          <tree-tools slot-scope="{ data }" :tree-node="data" @delDepts="getDepartments" />
         </el-tree>
       </el-card>
     </div>
