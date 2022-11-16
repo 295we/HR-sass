@@ -39,7 +39,7 @@ export default {
     operateDepts(type) {
       if (type === 'add') {
         // 执行添加部门的操作
-        this.$emit('addDepts', this.$treeNode) // 触发自定义事件告诉父组件来显示dialog 因为是添加子部门 所以需要传递父部门的信息
+        this.$emit('addDepts', this.treeNode) // 触发自定义事件告诉父组件来显示dialog 因为是添加子部门 所以需要传递当前部门的信息
       } else if (type === 'edit') {
         // 执行修改部门的操作
       } else {

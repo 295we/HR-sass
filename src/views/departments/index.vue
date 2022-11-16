@@ -13,7 +13,7 @@
         </el-tree>
       </el-card>
     </div>
-    <AddDept :show-dialog="showDialog" />
+    <AddDept :show-dialog="showDialog" :tree-node="node" />
   </div>
 </template>
 
@@ -26,7 +26,7 @@ export default {
   components: { TreeTools, AddDept },
   data() {
     return {
-      company: { name: '武汉工程科技教育股份有限公司', manager: '负责人' },
+      company: { name: '武汉工程科技教育股份有限公司', manager: '负责人', id: '' },
       departs: [],
       defaultProps: {
         label: 'name', // 表示 从这个属性显示内容
