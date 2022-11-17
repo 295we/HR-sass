@@ -1,34 +1,35 @@
 <template>
   <!-- 新增部门的弹层 -->
-  <el-dialog title="新增部门" :visible="showDialog" width="800px">
+  <el-dialog title="新增部门" :visible="showDialog" width="40%" @close="btnCancel">
     <!-- 表单数据 -->
     <!-- label-width:设置所有标题的宽度 -->
-    <el-form label-width="120px" :model="formData" :rules="rules">
-      <el-form-item label="部门名称">
-        <el-input v-model="formData.name" style="width: 80%" placeholder="1-50个字符" />
+    <el-form ref="deptForm" label-width="120px" :model="formData" :rules="rules">
+      <el-form-item label="部门名称" prop="name">
+        <el-input v-model="formData.name" style="width: 85%" placeholder="1-50个字符" />
       </el-form-item>
-      <el-form-item label="部门编码">
-        <el-input v-model="formData.code" style="width: 80%" placeholder="1-50个字符" />
+      <el-form-item label="部门编码" prop="code">
+        <el-input v-model="formData.code" style="width: 85%" placeholder="1-50个字符" />
       </el-form-item>
-      <el-form-item label="部门负责人">
-        <el-select v-model="formData.manager" style="width: 80%" placeholder="请选择" @focus="getEmployeeSimple">
+      <el-form-item label="部门负责人" prop="manager">
+        <el-select v-model="formData.manager" style="width: 85%" placeholder="请选择" @focus="getEmployeeSimple">
           <!-- 需要循环生成选项   这里做一下简单的处理 显示的是用户名 存的也是用户名-->
           <el-option v-for="(item, index) in peoples" :key="index" :value="item.username" :label="item.username" />
         </el-select>
       </el-form-item>
-      <el-form-item label="部门介绍">
-        <el-input v-model="formData.introduce" type="textarea" :rows="3" style="width: 80%" placeholder="1-300个字符" />
+      <el-form-item label="部门介绍" prop="introduce">
+        <el-input v-model="formData.introduce" type="textarea" :rows="3" style="width: 85%" placeholder="1-300个字符" />
       </el-form-item>
     </el-form>
     <!-- 确认和取消 -->
     <el-row slot="footer" type="flex" justify="center">
-      <el-col :span="6"><el-button size="small">取消</el-button> <el-button type="primary" size="small">确定</el-button></el-col>
+      <el-col :span="2"><el-button size="small" @click="btnCancel">取消</el-button></el-col>
+      <el-col :span="2"><el-button type="primary" size="small" @click="btnOK">确定</el-button></el-col>
     </el-row>
   </el-dialog>
 </template>
 
 <script>
-import { getDepartments } from '@/api/department'
+import { getDepartments, addDepartments } from '@/api/department'
 import { getEmployeeSimple } from '@/api/employees'
 export default {
   name: 'AddDept',
@@ -96,6 +97,23 @@ export default {
   methods: {
     async getEmployeeSimple() {
       this.peoples = await getEmployeeSimple()
+    },
+    btnOK() {
+      // 固定的搭配 el-form的实例上会有一个表单验证方法，给它传入一个函数 就可以验判断表单验证是否通过
+      this.$refs.deptForm.validate(async isOk => {
+        if (isOk) {
+          // 如果表单验证通过 就调用接口将数据发送给后端
+          // 因为是添加子部门，所以我们需要将新增的部门pid设置成当前部门的id，新增的部门就成了自己的子部门
+          await addDepartments({ ...this.formData, pid: this.treeNode.id })
+          this.$emit('addDepts')
+          this.$message.success('添加部门成功')
+          this.$emit('update:show-dialog', false) // 只要用sync修饰，就可以省略父组件的监听和方法，直接将值赋值给showDialog
+        }
+      })
+    },
+    btnCancel() {
+      this.$refs.deptForm.resetFields() // el-form固定写法 用于重置校验字段
+      this.$emit('update:show-dialog', false)
     }
   }
 }
