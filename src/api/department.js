@@ -9,3 +9,9 @@ export const delDepartments = id => request.delete(`/company/department/${id}`)
 
 // 封装新增部门的api模块
 export const addDepartments = data => request.post('/company/department', data)
+
+// 封装获取部门详情的api模块
+export const getDepartDetail = id => request.get(`/company/department/${id}`)
+
+// 封装编辑部门的api模块
+export const updateDepartments = data => request.put(`/company/department/${data.id}`, data)

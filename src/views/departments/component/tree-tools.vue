@@ -41,7 +41,8 @@ export default {
         // 执行添加部门的操作
         this.$emit('addDepts', this.treeNode) // 触发自定义事件告诉父组件来显示dialog 因为是添加子部门 所以需要传递当前部门的信息
       } else if (type === 'edit') {
-        // 执行修改部门的操作
+        // 执行编辑部门的操作
+        this.$emit('editDepts', this.treeNode)
       } else {
         // 执行删除部门的操作
         this.$confirm('确认删除该部门吗？').then(async result => {

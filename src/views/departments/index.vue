@@ -9,11 +9,11 @@
         <el-tree :data="departs" :props="defaultProps" :default-expand-all="true">
           <!-- 插槽内容会循环多次 有多少tree节点就循环多少次 -->
           <!-- 接收传递给插槽的数据 这里的data就是每个节点的数据对象-->
-          <TreeTools slot-scope="{ data }" :tree-node="data" @delDepts="getDepartments" @addDepts="addDepts" />
+          <TreeTools slot-scope="{ data }" :tree-node="data" @delDepts="getDepartments" @addDepts="addDepts" @editDepts="editDepts" />
         </el-tree>
       </el-card>
     </div>
-    <AddDept :show-dialog.sync="showDialog" :tree-node="node" @addDepts="getDepartments" />
+    <AddDept ref="addDept" :show-dialog.sync="showDialog" :tree-node="node" @addDepts="getDepartments" />
   </div>
 </template>
 
@@ -47,6 +47,11 @@ export default {
     addDepts(node) {
       this.showDialog = true
       this.node = node
+    },
+    editDepts(node) {
+      this.showDialog = true
+      this.node = node
+      this.$refs.addDept.getDepartDetail(node.id) // 调用子组件的方法 完成编辑的时候呈现数据的回显
     }
   }
 }

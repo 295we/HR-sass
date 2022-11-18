@@ -1,6 +1,6 @@
 <template>
   <!-- 新增部门的弹层 -->
-  <el-dialog title="新增部门" :visible="showDialog" width="40%" @close="btnCancel">
+  <el-dialog :title="showTitle" :visible="showDialog" width="40%" @close="btnCancel">
     <!-- 表单数据 -->
     <!-- label-width:设置所有标题的宽度 -->
     <el-form ref="deptForm" label-width="120px" :model="formData" :rules="rules">
@@ -22,14 +22,14 @@
     </el-form>
     <!-- 确认和取消 -->
     <el-row slot="footer" type="flex" justify="center">
-      <el-col :span="2"><el-button size="small" @click="btnCancel">取消</el-button></el-col>
-      <el-col :span="2"><el-button type="primary" size="small" @click="btnOK">确定</el-button></el-col>
+      <el-col :span="3"><el-button size="small" @click="btnCancel">取消</el-button></el-col>
+      <el-col :span="3"><el-button type="primary" size="small" @click="btnOK">确定</el-button></el-col>
     </el-row>
   </el-dialog>
 </template>
 
 <script>
-import { getDepartments, addDepartments } from '@/api/department'
+import { getDepartments, addDepartments, getDepartDetail, updateDepartments } from '@/api/department'
 import { getEmployeeSimple } from '@/api/employees'
 export default {
   name: 'AddDept',
@@ -94,8 +94,14 @@ export default {
       peoples: [] // 接收获取的员工简单列表的数据
     }
   },
+  computed: {
+    showTitle() {
+      return this.formData.id ? '编辑部门' : '新增部门'
+    }
+  },
   methods: {
     async getEmployeeSimple() {
+      // 获取简单员工列表
       this.peoples = await getEmployeeSimple()
     },
     btnOK() {
@@ -103,17 +109,33 @@ export default {
       this.$refs.deptForm.validate(async isOk => {
         if (isOk) {
           // 如果表单验证通过 就调用接口将数据发送给后端
-          // 因为是添加子部门，所以我们需要将新增的部门pid设置成当前部门的id，新增的部门就成了自己的子部门
-          await addDepartments({ ...this.formData, pid: this.treeNode.id })
+          if (this.formData.id) {
+            await updateDepartments(this.formData)
+            this.$message.success('修改部门成功')
+          } else {
+            // 因为是添加子部门，所以我们需要将新增的部门pid设置成当前部门的id，新增的部门就成了自己的子部门
+            await addDepartments({ ...this.formData, pid: this.treeNode.id })
+            this.$message.success('添加部门成功')
+          }
           this.$emit('addDepts')
-          this.$message.success('添加部门成功')
           this.$emit('update:show-dialog', false) // 只要用sync修饰，就可以省略父组件的监听和方法，直接将值赋值给showDialog
         }
       })
     },
     btnCancel() {
-      this.$refs.deptForm.resetFields() // el-form固定写法 用于重置校验字段
-      this.$emit('update:show-dialog', false)
+      // 这里需要手动重置一下formData中的数据，因为element-ui自带的resetFields不能重置表单之外的数据
+      this.formData = {
+        name: '',
+        code: '',
+        manager: '',
+        introduce: ''
+      }
+      this.$emit('update:show-dialog', false) // 关闭dialog
+      this.$refs.deptForm.resetFields() // el-form固定写法 用于重置校验字段 必须给每个el-form-item绑定prop 否则不生效
+    },
+    // 调用获取部门详情的接口封装为一个方法 并将得到的数据赋值给formData
+    async getDepartDetail(id) {
+      this.formData = await getDepartDetail(id)
     }
   }
 }
