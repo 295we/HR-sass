@@ -1,6 +1,6 @@
 <template>
   <!-- 新增部门的弹层 -->
-  <el-dialog :title="showTitle" :visible="showDialog" width="40%" @close="btnCancel">
+  <el-dialog :title="showTitle" :visible="showDialog" width="40%" :close-on-click-modal="false" @close="btnCancel">
     <!-- 表单数据 -->
     <!-- label-width:设置所有标题的宽度 -->
     <el-form ref="deptForm" label-width="120px" :model="formData" :rules="rules">
@@ -13,7 +13,7 @@
       <el-form-item label="部门负责人" prop="manager">
         <el-select v-model="formData.manager" style="width: 85%" placeholder="请选择" @focus="getEmployeeSimple">
           <!-- 需要循环生成选项   这里做一下简单的处理 显示的是用户名 存的也是用户名-->
-          <el-option v-for="(item, index) in peoples" :key="index" :value="item.username" :label="item.username" />
+          <el-option v-for="item in peoples" :key="item.id" :value="item.username" :label="item.username" />
         </el-select>
       </el-form-item>
       <el-form-item label="部门介绍" prop="introduce">
@@ -88,7 +88,7 @@ export default {
         manager: [{ required: true, message: '部门负责人不能为空', trigger: 'blur' }],
         introduce: [
           { required: true, message: '部门介绍不能为空', trigger: 'blur' },
-          { trigger: 'blur', min: 1, max: 300, message: '部门介绍要求1-50个字符' }
+          { trigger: 'blur', min: 1, max: 300, message: '部门介绍要求1-300个字符' }
         ]
       },
       peoples: [] // 接收获取的员工简单列表的数据
@@ -111,14 +111,15 @@ export default {
           // 如果表单验证通过 就调用接口将数据发送给后端
           if (this.formData.id) {
             await updateDepartments(this.formData)
-            this.$message.success('修改部门成功')
+            this.$message.success('编辑部门成功')
           } else {
             // 因为是添加子部门，所以我们需要将新增的部门pid设置成当前部门的id，新增的部门就成了自己的子部门
             await addDepartments({ ...this.formData, pid: this.treeNode.id })
             this.$message.success('添加部门成功')
           }
           this.$emit('addDepts')
-          this.$emit('update:show-dialog', false) // 只要用sync修饰，就可以省略父组件的监听和方法，直接将值赋值给showDialog
+          this.$emit('update:show-dialog', false) // 父组件只要在事件后面加.sync，就可以省略父组件的监听和方法，直接将值赋值给showDialog update冒号后面跟的是本组件的props属性名 update是固定写法
+          // 这里要注意 在关闭dialog的时候会自动调用dialog的close事件
         }
       })
     },
