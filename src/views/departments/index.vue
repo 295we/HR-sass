@@ -3,10 +3,15 @@
     <div class="app-container">
       <!-- 组织架构内容 -->
       <el-card class="tree-card">
+        <!-- 导航菜单 -->
+        <el-menu default-active="1" mode="horizontal" class="el-menu">
+          <el-menu-item id="menu-item" index="1">组织架构</el-menu-item>
+        </el-menu>
         <!-- 放置结构内容 头部 -->
-        <TreeTools :tree-node="company" :is-root="true" @addDepts="addDepts" />
+        <TreeTools :tree-node="company" :is-root="true" style="font-weight: 700" @addDepts="addDepts" />
+        <el-divider class="line" />
         <!-- 放置el-tree 身体部分-->
-        <el-tree :data="departs" :props="defaultProps" :default-expand-all="true">
+        <el-tree :data="departs" :props="defaultProps" :default-expand-all="false" :indent="16">
           <!-- 插槽内容会循环多次 有多少tree节点就循环多少次 -->
           <!-- 接收传递给插槽的数据 这里的data就是每个节点的数据对象-->
           <TreeTools slot-scope="{ data }" :tree-node="data" @delDepts="getDepartments" @addDepts="addDepts" @editDepts="editDepts" />
@@ -61,5 +66,17 @@ export default {
 .tree-card {
   padding: 30px 140px;
   font-size: 14px;
+}
+.line {
+  width: 96%;
+  margin: 0 0 10px 0;
+}
+.el-menu {
+  width: 121%;
+  margin: -50px 0px 30px -140px;
+}
+#menu-item {
+  color: #409eff;
+  height: 49px;
 }
 </style>

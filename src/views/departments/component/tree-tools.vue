@@ -1,7 +1,8 @@
 <template>
-  <el-row type="flex" justify="space-between" align="middle" style="height: 40px; width: 100%">
+  <el-row type="flex" justify="space-between" align="middle" class="row">
     <el-col>
-      <span>{{ treeNode.name }}</span>
+      <i v-if="treeNode.manager === '负责人'" class="iconfont icon-gongsi" />
+      <i v-if="treeNode.manager !== '负责人' && !treeNode.pid" class="iconfont icon-person" /> <span>{{ treeNode.name }}</span>
     </el-col>
     <el-col :span="4">
       <el-row type="flex" justify="end" align="middle">
@@ -57,4 +58,10 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped>
+.row {
+  height: 40px;
+  width: 100%;
+  color: #000;
+}
+</style>
