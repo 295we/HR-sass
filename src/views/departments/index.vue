@@ -4,21 +4,24 @@
       <!-- 组织架构内容 -->
       <el-card class="tree-card">
         <!-- 导航菜单 -->
-        <el-menu default-active="1" mode="horizontal" class="el-menu">
-          <el-menu-item id="menu-item" index="1">组织架构</el-menu-item>
-        </el-menu>
-        <!-- 放置结构内容 头部 -->
-        <TreeTools :tree-node="company" :is-root="true" style="font-weight: 700" @addDepts="addDepts" />
-        <el-divider class="line" />
-        <!-- 放置el-tree 身体部分-->
-        <el-tree :data="departs" :props="defaultProps" :default-expand-all="false" :indent="16">
-          <!-- 插槽内容会循环多次 有多少tree节点就循环多少次 -->
-          <!-- 接收传递给插槽的数据 这里的data就是每个节点的数据对象-->
-          <TreeTools slot-scope="{ data }" :tree-node="data" @delDepts="getDepartments" @addDepts="addDepts" @editDepts="editDepts" />
-        </el-tree>
+        <el-tabs>
+          <el-tab-pane label="组织架构">
+            <!-- 放置结构内容 头部 -->
+            <TreeTools :tree-node="company" :is-root="true" style="font-weight: 700" @addDepts="addDepts" />
+            <el-divider class="line" />
+            <!-- 放置el-tree 身体部分-->
+            <el-tree :data="departs" :props="defaultProps" :default-expand-all="true">
+              <!-- 插槽内容会循环多次 有多少tree节点就循环多少次 -->
+              <!-- 接收传递给插槽的数据 这里的data就是每个节点的数据对象-->
+              <TreeTools slot-scope="{ data }" :tree-node="data" @delDepts="getDepartments" @addDepts="addDepts" @editDepts="editDepts" />
+            </el-tree>
+          </el-tab-pane>
+        </el-tabs>
       </el-card>
+      <!-- loading进度条 -->
+      <span v-loading="loading" class="dashboard-container" />
+      <AddDept ref="addDept" :show-dialog.sync="showDialog" :tree-node="node" @addDepts="getDepartments" />
     </div>
-    <AddDept ref="addDept" :show-dialog.sync="showDialog" :tree-node="node" @addDepts="getDepartments" />
   </div>
 </template>
 
@@ -38,7 +41,8 @@ export default {
         children: 'children' // 从这个属性去找子节点
       },
       showDialog: false, // 默认关闭dialog
-      node: null // 记录当前点击的node节点
+      node: null, // 记录当前点击的node节点
+      loading: false // 添加进度条且默认关闭
     }
   },
   created() {
@@ -46,8 +50,10 @@ export default {
   },
   methods: {
     async getDepartments() {
+      this.loading = true
       const result = await getDepartments()
       this.departs = transListToData(result.depts, '') // 这里定义一个空字符串 因为所有根节点的pid都是空字符串
+      this.loading = false
     },
     addDepts(node) {
       this.showDialog = true
@@ -68,15 +74,13 @@ export default {
   font-size: 14px;
 }
 .line {
-  width: 96%;
+  width: 100%;
   margin: 0 0 10px 0;
 }
-.el-menu {
-  width: 121%;
-  margin: -50px 0px 30px -140px;
+.el-tabs {
+  margin-top: -30px;
 }
-#menu-item {
-  color: #409eff;
-  height: 49px;
+.el-tab-pane {
+  margin-top: 20px;
 }
 </style>
