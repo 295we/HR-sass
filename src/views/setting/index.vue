@@ -8,7 +8,7 @@
             <el-row style="height: 60px">
               <el-button icon="el-icon-plus" size="small" type="primary">新增角色</el-button>
             </el-row>
-            <el-table>
+            <el-table border>
               <el-table-column label="序号" width="120" />
               <el-table-column label="角色名称" width="240" />
               <el-table-column label="描述" />
