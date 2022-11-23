@@ -14,3 +14,18 @@ export const getCompanyInfo = companyId => request.get(`/company/${companyId}`)
  * 删除role(角色)
  */
 export const deleteRole = id => request.delete(`/sys/role/${id}`)
+
+/**
+ * 编辑角色
+ */
+export const updateRole = data => request.put(`/sys/role/${data.id}`, data)
+
+/**
+ * 获取角色详情
+ */
+export const getRoleDetail = id => request.get(`/sys/role/${id}`)
+
+/**
+ * 新增角色
+ */
+export const addRole = data => request.post('/sys/role', data)
