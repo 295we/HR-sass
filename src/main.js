@@ -16,13 +16,17 @@ import * as directives from '@/directives' // 引入所有自定义指令
 import '@/icons' // icon
 import '@/permission' // permission control
 
+// 注册全局组件
+import Components from '@/components'
+Vue.use(Components)
+
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
 
 // 直接一次性注册所有的自定义指令
-Object.keys(directives).forEach((key) => {
+Object.keys(directives).forEach(key => {
   Vue.directive(key, directives[key])
 })
 
@@ -32,5 +36,5 @@ new Vue({
   el: '#app',
   router,
   store,
-  render: (h) => h(App)
+  render: h => h(App)
 })
